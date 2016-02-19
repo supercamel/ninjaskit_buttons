@@ -4,7 +4,7 @@
 #include "ninjaskit/ninjaskit.h"
 
 
-const int KEYPAD_EVENT_BUFFER_SIZE = 16;
+const int KEYPAD_EVENT_BUFFER_SIZE = 4;
 
 enum EVENT_TYPE
 {
@@ -58,7 +58,7 @@ public:
 					//append event
 					KeypadEvent event;
 					event.time = etk::now();
-					event.button = j*4 + i;
+					event.button = j*N_ROWS + i;
 					state ? event.type = BUTTON_PRESS_EVENT : event.type = BUTTON_RELEASE_EVENT;
 					
 					ringbuf.put(event);
@@ -69,6 +69,8 @@ public:
 			
 			set_pin(col_pin[i], false);
 			
+			//pause for a *very* short moment just incase the lines are very long / have some stray capacitance and need a moment to switch low
+			//i really don't know this is necessary, but whatever.
 			while(etk::static_range(3))
 				asm("nop");
 		}
