@@ -1,21 +1,20 @@
 #include "ninjaskit/ninjaskit.h"
 #include "keypad/keypad.h"
 
+
+gpio_pin rows[] = { {PC, 13}, {PC, 15}, {PB, 9}, {PA, 11} };
+gpio_pin cols[] = { {PB, 8}, {PB, 7}, {PA, 12}, {PB, 6 }};
+Keypad<4, 4> keypad(rows, cols);
+
+
 int main()
 {
     clock_setup();
 
     Serial1.begin(57600);
 
-    //create a list of row pins
-    gpio_pin rows[] = { {PA, 0}, {PA, 1}, {PA, 2}, {PA, 3} };
-
-    //create a list of column pins
-    gpio_pin cols[] = { {PA, 4}, {PA, 5}, {PA, 6}, {PA, 7 }};
-
-    //create a keypad with four rows and four columns - 16 buttons total
-    Keypad<4, 4> keypad(rows, cols);
-
+    keypad.begin();
+    
     while(true)
     {
         etk::sleep_ms(10);

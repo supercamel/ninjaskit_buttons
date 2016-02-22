@@ -26,16 +26,10 @@ public:
     Keypad(gpio_pin row_pins[N_ROWS], gpio_pin col_pins[N_COLS]) : ringbuf(event_buffer, KEYPAD_EVENT_BUFFER_SIZE)
     {
         for(uint32 i = 0; i < N_ROWS; i++)
-        {
-            configure_as_input(row_pins[i], INPUT_PULLDOWN);
             row_pin[i] = row_pins[i];
-        }
 
         for(uint32 i = 0; i < N_COLS; i++)
-        {
-            configure_as_output(col_pins[i]);
             col_pin[i] = col_pins[i];
-        }
 
         for(auto i : etk::range(N_COLS))
         {
@@ -44,6 +38,15 @@ public:
         }
     }
 
+	void begin()
+	{
+		for(uint32 i = 0; i < N_ROWS; i++)
+            configure_as_input(row_pin[i], INPUT_PULLDOWN);
+
+        for(uint32 i = 0; i < N_COLS; i++)
+            configure_as_output(col_pin[i]);
+	}
+	
     void read_keypad()
     {
         for(auto i : etk::range(N_COLS))
